@@ -7,12 +7,17 @@ import {
 } from './models';
 
 {{#each services}}
-export class {{serviceName}}Client extends Client<{{serviceDefinitionName}}> {
+export class {{serviceName}}Client {
+  private client: Client<{{serviceDefinitionName}}>;
+  constructor(baseURL: string) {
+    this.client = new Client(baseURL);
+  }
+
   {{#each routes}}
   public {{routeName}}$ = (
     body: {{request}},
     token?: string
-  ): Observable<{{response}}> => this.call('{{routeName}}', body, token);
+  ): Observable<{{response}}> => this.client.call('{{routeName}}', body, token);
   {{/each}}
 }
 {{/each}}

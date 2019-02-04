@@ -3,7 +3,7 @@ import * as express from 'express';
 export class Response<T> {
   constructor(private response: express.Response) {}
   status = (status: number) => {
-    return new ResponseWithStatus(this.response, status);
+    return new ResponseWithStatus<T>(this.response, status);
   };
 }
 
