@@ -1,0 +1,18 @@
+import { Observable } from 'rxjs/Observable';
+import Client from 'ts-rpc-http/client';
+import { 
+    {{#each imports}}
+  {{this}},
+    {{/each}} 
+} from './models';
+
+{{#each services}}
+export class {{serviceName}}Client extends Client<{{serviceDefinitionName}}> {
+  {{#each routes}}
+  public {{routeName}}$ = (
+    body: {{request}},
+    token?: string
+  ): Observable<{{response}}> => this.call('{{routeName}}', body, token);
+  {{/each}}
+}
+{{/each}}

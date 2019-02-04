@@ -1,0 +1,1 @@
+Generate types and client code for a typesafe HTTP RPC API easily! Documentation to come.
