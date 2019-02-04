@@ -1,15 +1,15 @@
 {
   "name": "ts-rpc-http",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "Quickly generate a typesafe RPC API over HTTP with Express along with a typesafe rxjs client",
   "main": "index.js",
   "scripts": {
     "build": "rm -Rf dist && tsc && cp src/template.handlebars dist/",
-    "package":"npm run build && cp package.json dist && cp README.md dist && cp -R bin dist && cd dist && npm pack",
-    "publish":"npm run package && cd dist && npm publish ts-rpc-http*.tgz"
+    "package": "npm run build && cp package.json dist && cp README.md dist && cp -R bin dist && cd dist && npm pack",
+    "publish": "npm run package && cd dist && npm publish ts-rpc-http*.tgz"
   },
   "bin": {
-    "generate": "./bin/generate"
+    "ts-generate": "./bin/generate"
   },
   "keywords": [],
   "author": "",

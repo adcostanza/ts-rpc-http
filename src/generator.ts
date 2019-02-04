@@ -108,7 +108,7 @@ const templateText = fs.readFileSync(
 );
 const template = handlebars.compile(templateText);
 const generated = template({ services: templateMap, imports });
-const generatePath = folder + '/' + generatedName + '.ts';
+const generatePath = folder + '/' + generatedName;
 
 fs.writeFile(generatePath, generated, err => {
   console.log(err || 'success');
