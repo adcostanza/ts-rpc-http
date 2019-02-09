@@ -34,11 +34,12 @@ export class Server<T> {
     });
   }
 
-  start() {
+  start(onStart?: () => void) {
     // start the express server
     this.app.listen(this.port, () => {
       // tslint:disable-next-line:no-console
       console.log(`server started at http://localhost:${this.port}`);
+      onStart();
     });
   }
 
