@@ -21,7 +21,7 @@ export class Server<T> {
     closure: (
       req: Request<RequestType<B>>,
       res: Response<ResponseType<B>>
-    ) => express.Response | null
+    ) => express.Response | void
   ) {
     this.app.post(('/' + routeName) as string, (expressReq, expressRes) => {
       return closure(new Request(expressReq), new Response(expressRes));
