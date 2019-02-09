@@ -39,7 +39,9 @@ export class Server<T> {
     this.app.listen(this.port, () => {
       // tslint:disable-next-line:no-console
       console.log(`server started at http://localhost:${this.port}`);
-      onStart();
+      if (onStart !== undefined) {
+        onStart();
+      }
     });
   }
 
