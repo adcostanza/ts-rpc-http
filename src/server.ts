@@ -37,14 +37,14 @@ export class Server<T> {
     });
   }
 
-  start(): Observable<http.Server> {
+  start(): Observable<Server<T>> {
     return Observable.create(observer => {
       try {
         this.server = this.app.listen(this.port, () => {
           console.log(`server started at http://localhost:${this.port}`);
         });
 
-        observer.next(this.server);
+        observer.next(this);
         observer.complete();
       } catch (e) {
         observer.error(e);
@@ -58,6 +58,7 @@ export class Server<T> {
     return Observable.create(observer => {
       try {
         this.server.close(() => {
+          observer.next();
           observer.complete();
         });
       } catch (e) {
