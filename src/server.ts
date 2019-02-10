@@ -2,12 +2,14 @@ import * as bodyParser from 'body-parser'; //used to parse the form data that yo
 import * as express from 'express';
 import { Request, RequestType, Response, ResponseType } from './requestResponse';
 import { Observable } from 'rxjs/Observable';
+import * as http from 'http';
 var cors = require('cors');
 //@ts-ignore
 global.XMLHttpRequest = require('xmlhttprequest').XMLHttpRequest;
 
 export class Server<T> {
   private app: express.Express;
+  private server: http.Server;
   constructor(private port?: number) {
     this.app = express();
     this.app.use(cors());
@@ -35,13 +37,27 @@ export class Server<T> {
     });
   }
 
-  start(): Observable<void> {
+  start(): Observable<http.Server> {
     return Observable.create(observer => {
       try {
-        this.app.listen(this.port, () => {
-          // tslint:disable-next-line:no-console
+        this.server = this.app.listen(this.port, () => {
           console.log(`server started at http://localhost:${this.port}`);
-          observer.next();
+        });
+
+        observer.next(this.server);
+        observer.complete();
+      } catch (e) {
+        observer.error(e);
+        observer.complete();
+      }
+    });
+    // start the express server
+  }
+
+  close(): Observable<void> {
+    return Observable.create(observer => {
+      try {
+        this.server.close(() => {
           observer.complete();
         });
       } catch (e) {
@@ -49,7 +65,6 @@ export class Server<T> {
         observer.complete();
       }
     });
-    // start the express server
   }
 
   private config(): void {
