@@ -5,15 +5,16 @@ export class Response<T> {
   status = (status: number) => {
     return new ResponseWithStatus<T>(this.response, status);
   };
+
+  sendStatus = (status: number) => {
+    return this.response.sendStatus(status);
+  };
 }
 
 export class ResponseWithStatus<T> {
   constructor(private response: express.Response, private status: number) {}
   send = (body: T) => {
     return this.response.status(this.status).send(body);
-  };
-  done = () => {
-    return this.response.status(this.status);
   };
 }
 
