@@ -5,6 +5,10 @@ export class Response<T> {
   status = (status: number) => {
     return new ResponseWithStatus<T>(this.response, status);
   };
+
+  sendStatus = (status: number) => {
+    return this.response.sendStatus(status);
+  };
 }
 
 export class ResponseWithStatus<T> {
@@ -12,15 +16,13 @@ export class ResponseWithStatus<T> {
   send = (body: T) => {
     return this.response.status(this.status).send(body);
   };
-  done = () => {
-    return this.response.status(this.status);
-  };
 }
 
 export class Request<T> {
   constructor(private request: express.Request) {}
   get body(): T {
     //@ts-ignore
+    console.log('request name', this.request.name);
     return this.request.body as T;
   }
   get headers(): Record<string, any> {

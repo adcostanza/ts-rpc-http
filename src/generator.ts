@@ -133,3 +133,49 @@ const generatePath = folder + '/' + generatedName;
 fs.writeFile(generatePath, generated, err => {
   console.log(err || 'success');
 });
+
+//now let's also generate json schemas
+
+console.log('Generating JSON schemas...');
+const util = require('util');
+const exec = util.promisify(require('child_process').exec);
+
+var deleteFolderRecursive = function(path) {
+  if (fs.existsSync(path)) {
+    fs.readdirSync(path).forEach(function(file, index) {
+      var curPath = path + '/' + file;
+      if (fs.lstatSync(curPath).isDirectory()) {
+        // recurse
+        deleteFolderRecursive(curPath);
+      } else {
+        // delete file
+        fs.unlinkSync(curPath);
+      }
+    });
+    fs.rmdirSync(path);
+  }
+};
+
+const makeSchemaDirectory = () => fs.mkdirSync(`${folder}/schema`);
+try {
+  makeSchemaDirectory();
+} catch (e) {
+  deleteFolderRecursive(`${folder}/schema`);
+  makeSchemaDirectory();
+}
+
+async function generateSchema(type: string) {
+  const cmd = `npx typescript-json-schema ${modelsLocation} ${type} --required --topRef -o ${folder}/schema/${type}.json`;
+  console.log('Running command');
+  console.log(cmd);
+  const { stdout, stderr } = await exec(cmd);
+  if (stderr != "") {
+    console.log(stderr);
+  }
+}
+
+imports.forEach(current => {
+  generateSchema(current)
+    .then()
+    .catch(console.log);
+});

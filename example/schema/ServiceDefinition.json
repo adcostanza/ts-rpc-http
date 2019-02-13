@@ -1,0 +1,90 @@
+{
+    "$ref": "#/definitions/ServiceDefinition",
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "definitions": {
+        "RequestResponse<createTodoRequest,Todo>": {
+            "properties": {
+                "request": {
+                    "$ref": "#/definitions/createTodoRequest"
+                },
+                "response": {
+                    "$ref": "#/definitions/Todo"
+                }
+            },
+            "required": [
+                "request",
+                "response"
+            ],
+            "type": "object"
+        },
+        "RequestResponse<createWithReallyLongNameThatWillCauseWrappingRequest,createWithReallyLongNameThatWillCauseWrappingResponse>": {
+            "properties": {
+                "request": {
+                    "$ref": "#/definitions/createWithReallyLongNameThatWillCauseWrappingRequest"
+                },
+                "response": {
+                    "$ref": "#/definitions/createWithReallyLongNameThatWillCauseWrappingResponse"
+                }
+            },
+            "required": [
+                "request",
+                "response"
+            ],
+            "type": "object"
+        },
+        "ServiceDefinition": {
+            "properties": {
+                "createTodo": {
+                    "$ref": "#/definitions/RequestResponse<createTodoRequest,Todo>"
+                },
+                "reallyLongCreateThatWillCauseALotOfWrapping": {
+                    "$ref": "#/definitions/RequestResponse<createWithReallyLongNameThatWillCauseWrappingRequest,createWithReallyLongNameThatWillCauseWrappingResponse>"
+                }
+            },
+            "required": [
+                "createTodo",
+                "reallyLongCreateThatWillCauseALotOfWrapping"
+            ],
+            "type": "object"
+        },
+        "Todo": {
+            "properties": {
+                "dateCreated": {
+                    "description": "Enables basic storage and retrieval of dates and times.",
+                    "format": "date-time",
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "dateCreated",
+                "description",
+                "id"
+            ],
+            "type": "object"
+        },
+        "createTodoRequest": {
+            "properties": {
+                "description": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "description"
+            ],
+            "type": "object"
+        },
+        "createWithReallyLongNameThatWillCauseWrappingRequest": {
+            "type": "object"
+        },
+        "createWithReallyLongNameThatWillCauseWrappingResponse": {
+            "type": "object"
+        }
+    }
+}
+
