@@ -1,15 +1,15 @@
 import { Observable } from 'rxjs/Observable';
 import Client from 'ts-rpc-http/client';
 import { 
-  GalleryServiceDefinition,
+  ServiceDefinition,
   createTodoRequest,
   Todo,
   createWithReallyLongNameThatWillCauseWrappingRequest,
   createWithReallyLongNameThatWillCauseWrappingResponse,
 } from './models';
 
-export class GalleryClient {
-  private client: Client<GalleryServiceDefinition>;
+export class TodoClient {
+  private client: Client<ServiceDefinition>;
   constructor(baseURL: string) {
     this.client = new Client(baseURL);
   }

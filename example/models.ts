@@ -13,11 +13,12 @@ export interface Todo {
 export interface createWithReallyLongNameThatWillCauseWrappingRequest {}
 export interface createWithReallyLongNameThatWillCauseWrappingResponse {}
 
-//@http-rpc(Gallery)
-export interface GalleryServiceDefinition {
+//@http-rpc(Todo)
+export interface ServiceDefinition {
   createTodo: RequestResponse<createTodoRequest, Todo>;
   reallyLongCreateThatWillCauseALotOfWrapping: RequestResponse<
-    createWithReallyLongNameThatWillCauseWrappingRequest,
+    createWithReallyLongNameThatWillCauseWrappingRequest, //comment on right side
     createWithReallyLongNameThatWillCauseWrappingResponse
   >;
+  //inProgress: comment...
 }

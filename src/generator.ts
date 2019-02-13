@@ -56,6 +56,7 @@ const templateMap: TemplateMap = {};
 
 let current = '';
 for (let line of lines) {
+  //recognize special comment
   if (line.trim().indexOf('//@http-rpc') > -1) {
     onDefinition = true;
     current = leftOf(')', rightOf('//@http-rpc(', line));
@@ -66,6 +67,15 @@ for (let line of lines) {
     };
     continue;
   }
+
+  //skip lines with left side comments
+  if (leftOf('//', line) == '') {
+    continue;
+  } else {
+    //ignore right side comments
+    line = leftOf('//', line);
+  }
+
   if (!onDefinition) {
     continue;
   }
