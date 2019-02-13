@@ -3,6 +3,9 @@ import * as express from 'express';
 import { Request, RequestType, Response, ResponseType } from './requestResponse';
 import { Observable } from 'rxjs/Observable';
 import * as http from 'http';
+import { validateRequest } from './validator';
+import * as path from 'path';
+
 var cors = require('cors');
 //@ts-ignore
 global.XMLHttpRequest = require('xmlhttprequest').XMLHttpRequest;
@@ -31,11 +34,27 @@ export class Server<T> {
     });
   }
 
-  middlware(fn: (req: express.Request, res: express.Response, next: () => void) => void) {
+  middleware(
+    fn: (req: express.Request, res: express.Response, next: () => void) => void
+  ) {
     this.app.use(function(req, res, next) {
       fn(req, res, next);
     });
   }
+
+  //Note all requests must end with Request for this to work
+  validateSchemas = (schemaPath: string) => {
+    return this.middleware((req, res, next) => {
+      const schemaFile = path.join(process.env.PWD, schemaPath, `${req.url}Request.json`);
+      //will throw error for validation errors
+      try {
+        validateRequest(req.body, schemaFile);
+        next();
+      } catch (e) {
+        res.status(400).send({error: e.message})
+      }
+    });
+  };
 
   start(): Observable<Server<T>> {
     return Observable.create(observer => {

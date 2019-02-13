@@ -22,7 +22,6 @@ export class Request<T> {
   constructor(private request: express.Request) {}
   get body(): T {
     //@ts-ignore
-    console.log('request name', this.request.name);
     return this.request.body as T;
   }
   get headers(): Record<string, any> {
