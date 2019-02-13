@@ -14,11 +14,37 @@ const generatedName = process.argv[3];
 
 console.log(modelsLocation, generatedName);
 
+/**
+ * returns the right side of the first occurence of the needle in the haystack
+ * @param needle the string to find
+ * @param haystack the string to find the needle in
+ */
+const rightOf = (needle: string, haystack: string): string => {
+  return haystack
+    .trim()
+    .split(needle)[1]
+    .trim();
+};
+
+/**
+ * returns the left side of the first occurence of the needle in the haystack
+ * @param needle the string to find
+ * @param haystack the string to find the needle in
+ */
+const leftOf = (needle: string, haystack: string): string => {
+  return haystack
+    .trim()
+    .split(needle)[0]
+    .trim();
+};
+
 const split1 = modelsLocation.split('/');
 const folder = split1.slice(0, split1.length - 1).join('/');
 const data = fs.readFileSync(modelsLocation, 'utf-8');
 const lines = data.split('\n');
 let onDefinition = false;
+
+let accumulatedLines = ''; //can accumulate across newlines
 interface Service {
   serviceName: string;
   serviceDefinitionName: string;
@@ -30,13 +56,9 @@ const templateMap: TemplateMap = {};
 
 let current = '';
 for (let line of lines) {
-  console.log(line);
   if (line.trim().indexOf('//@http-rpc') > -1) {
     onDefinition = true;
-    current = line
-      .trim()
-      .split('//@http-rpc(')[1]
-      .split(')')[0];
+    current = leftOf(')', rightOf('//@http-rpc(', line));
     templateMap[current] = {
       serviceName: current,
       serviceDefinitionName: '',
@@ -53,40 +75,28 @@ for (let line of lines) {
     onDefinition = false;
     continue;
   }
-  //parse definition
-  if (line.trim() === '}') {
-    continue; //skip first line
-  }
 
   if (line.trim().indexOf('export') > -1) {
-    const serviceDefinitionName = line
-      .trim()
-      .split('interface')[1]
-      .trim()
-      .split('{')[0]
-      .trim();
+    const serviceDefinitionName = leftOf('{', rightOf('interface', line)).trim();
 
     templateMap[current] = { ...templateMap[current], serviceDefinitionName };
     continue;
   }
 
-  const split = line.trim().split(':');
-  //   console.log(split);
-  const routeName = split[0];
-  const reqRes = split[1];
-  const request = reqRes
-    .trim()
-    .split('RequestResponse<')[1]
-    .split(',')[0]
-    .trim();
-  const response = reqRes
-    .trim()
-    .split('RequestResponse<')[1]
-    .split(',')[1]
-    .split('>')[0]
-    .trim();
+  //req/res definition, will search for ; to find full line
+  accumulatedLines += line;
+  if (line.indexOf(';') >= 0) {
+    const routeName = leftOf(':', accumulatedLines);
+    const reqRes = rightOf(':', accumulatedLines);
+    const request = leftOf(',', rightOf('RequestResponse<', reqRes));
 
-  templateMap[current].routes.push({ routeName, request, response });
+    const response = leftOf('>', rightOf(',', rightOf('RequestResponse<', reqRes)));
+
+    //reset accumulatedLines
+    accumulatedLines = '';
+
+    templateMap[current].routes.push({ routeName, request, response });
+  }
 }
 
 const imports = _.uniq(
