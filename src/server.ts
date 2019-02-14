@@ -9,6 +9,8 @@ var cors = require('cors');
 //@ts-ignore
 global.XMLHttpRequest = require('xmlhttprequest').XMLHttpRequest;
 
+type ReturnType<X> = X extends (req: any, res: any) => infer T ? T : never;
+
 export class Server<T> {
   private app: express.Express;
   private server: http.Server;
@@ -26,7 +28,7 @@ export class Server<T> {
     closure: (
       req: Request<RequestType<B>>,
       res: Response<ResponseType<B>>
-    ) => express.Response | void
+    ) => express.Response | void | Promise<express.Response> | Promise<void>
   ) {
     this.app.post(('/' + routeName) as string, (expressReq, expressRes) => {
       return closure(new Request(expressReq), new Response(expressRes));
@@ -57,8 +59,12 @@ export class Server<T> {
 
   async start(): Promise<Server<T>> {
     try {
-      this.server = await util.promisify(this.app.listen)(this.port);
-      return this;
+      return await new Promise((success, err) =>
+        this.app.listen(this.port, server => {
+          console.log(`started up server on port ${this.port}`);
+          success(server);
+        })
+      );
     } catch (e) {
       throw Error(e);
     }

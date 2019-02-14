@@ -37,6 +37,6 @@ export default class Client<S> {
 
     const result = await post(options);
 
-    return JSON.parse(result.body as string) as R;
+    return JSON.parse(result.body as string).body as R;
   }
 }
