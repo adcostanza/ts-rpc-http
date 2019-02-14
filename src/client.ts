@@ -1,7 +1,13 @@
-import { Observable } from 'rxjs/Observable';
-import { ajax } from 'rxjs/observable/dom/ajax';
-import { map } from 'rxjs/operators/map';
-import { ResponseType, RequestType } from './requestResponse';
+import * as request from 'request';
+import { CoreOptions, UriOptions } from 'request';
+import { RequestType, ResponseType } from './requestResponse';
+
+export const post = (options: CoreOptions & UriOptions) =>
+  request(options, function(error, response, body) {
+    if (!error && response.statusCode == 200) {
+      console.log(body.id); // Print the shortened url.
+    }
+  });
 
 export default class Client<S> {
   private baseURL: string = '';
@@ -10,19 +16,27 @@ export default class Client<S> {
     this.baseURL = baseURL;
   }
 
-  call<T extends keyof S, R = ResponseType<S[T]>>(
+  async call<T extends keyof S, R = ResponseType<S[T]>>(
     name: T,
     body: RequestType<S[T]>,
     token?: string
-  ): Observable<R> {
-    let headers = { 'Content-Type': 'application/json' };
-    if (token !== undefined) {
-      headers['Authorization'] = token;
-    }
-    const url = this.baseURL + '/' + name;
+  ): Promise<R> {
+    const uri = this.baseURL + '/' + name;
 
-    return ajax({ url, body, headers, method: 'POST' }).pipe(
-      map(res => res.response as R)
-    );
+    let options = {
+      uri,
+      method: 'POST',
+      json: {
+        body,
+      },
+    };
+    if (token !== undefined) {
+      options['headers'] = {};
+      options['headers']['Authorization'] = token;
+    }
+
+    const result = await post(options);
+
+    return JSON.parse(result.body as string) as R;
   }
 }

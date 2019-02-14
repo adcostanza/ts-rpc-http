@@ -1,4 +1,3 @@
-import { Observable } from 'rxjs/Observable';
 import Client from 'ts-rpc-http/client';
 import { 
   ServiceDefinition,
@@ -14,12 +13,14 @@ export class TodoClient {
     this.client = new Client(baseURL);
   }
 
-  public createTodo$ = (
+  public createTodo = async (
     body: createTodoRequest,
     token?: string
-  ): Observable<Todo> => this.client.call('createTodo', body, token);
-  public reallyLongCreateThatWillCauseALotOfWrapping$ = (
+  ): Promise<Todo> => this.client.call('createTodo', body, token);
+  
+  public reallyLongCreateThatWillCauseALotOfWrapping = async (
     body: createWithReallyLongNameThatWillCauseWrappingRequest,
     token?: string
-  ): Observable<createWithReallyLongNameThatWillCauseWrappingResponse> => this.client.call('reallyLongCreateThatWillCauseALotOfWrapping', body, token);
+  ): Promise<createWithReallyLongNameThatWillCauseWrappingResponse> => this.client.call('reallyLongCreateThatWillCauseALotOfWrapping', body, token);
+  
 }
