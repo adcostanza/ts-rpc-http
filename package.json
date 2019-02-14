@@ -1,6 +1,6 @@
 {
   "name": "ts-rpc-http",
-  "version": "0.0.27",
+  "version": "0.0.29",
   "description": "Quickly generate a typesafe RPC API over HTTP with Express along with a typesafe rxjs client",
   "main": "index.js",
   "scripts": {
@@ -22,14 +22,14 @@
     "webpack-cli": "^3.2.1"
   },
   "dependencies": {
-    "@types/request": "^2.48.1",
+    "@types/axios": "^0.14.0",
+    "axios": "^0.18.0",
     "body-parser": "^1.18.3",
     "cors": "^2.8.5",
     "express": "^4.16.4",
     "handlebars": "^4.0.12",
     "jsonschema": "^1.2.4",
     "lodash": "^4.17.11",
-    "request": "^2.88.0",
     "typescript-json-schema": "^0.35.0",
     "xmlhttprequest": "^1.8.0"
   }

@@ -61,7 +61,7 @@ export class Server<T> {
     try {
       return await new Promise((success, err) =>
         this.app.listen(this.port, server => {
-          console.log(`started up server on port ${this.port}`);
+          console.log(`Server started on port ${this.port}...`);
           success(server);
         })
       );
