@@ -1,11 +1,10 @@
 import * as bodyParser from 'body-parser'; //used to parse the form data that you pass in the request
 import * as express from 'express';
-import { Request, RequestType, Response, ResponseType } from './requestResponse';
-import { Observable } from 'rxjs/Observable';
 import * as http from 'http';
-import { validateRequest } from './validator';
 import * as path from 'path';
-
+const util = require('util');
+import { Request, RequestType, Response, ResponseType } from './requestResponse';
+import { validateRequest } from './validator';
 var cors = require('cors');
 //@ts-ignore
 global.XMLHttpRequest = require('xmlhttprequest').XMLHttpRequest;
@@ -51,40 +50,26 @@ export class Server<T> {
         validateRequest(req.body, schemaFile);
         next();
       } catch (e) {
-        res.status(400).send({error: e.message})
+        res.status(400).send({ error: e.message });
       }
     });
   };
 
-  start(): Observable<Server<T>> {
-    return Observable.create(observer => {
-      try {
-        this.server = this.app.listen(this.port, () => {
-          console.log(`server started at http://localhost:${this.port}`);
-        });
-
-        observer.next(this);
-        observer.complete();
-      } catch (e) {
-        observer.error(e);
-        observer.complete();
-      }
-    });
-    // start the express server
+  async start(): Promise<Server<T>> {
+    try {
+      this.server = await util.promisify(this.app.listen)(this.port);
+      return this;
+    } catch (e) {
+      throw Error(e);
+    }
   }
 
-  close(): Observable<void> {
-    return Observable.create(observer => {
-      try {
-        this.server.close(() => {
-          observer.next();
-          observer.complete();
-        });
-      } catch (e) {
-        observer.error(e);
-        observer.complete();
-      }
-    });
+  async close(): Promise<void> {
+    try {
+      await util.promisify(this.server.close());
+    } catch (e) {
+      throw Error(e);
+    }
   }
 
   private config(): void {
