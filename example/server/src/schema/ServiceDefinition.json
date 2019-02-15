@@ -21,10 +21,14 @@
             "properties": {
                 "createTodo": {
                     "$ref": "#/definitions/RequestResponse<createTodoRequest,Todo>"
+                },
+                "createTodoAsync": {
+                    "$ref": "#/definitions/RequestResponse<createTodoRequest,Todo>"
                 }
             },
             "required": [
-                "createTodo"
+                "createTodo",
+                "createTodoAsync"
             ],
             "type": "object"
         },

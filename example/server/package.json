@@ -4,7 +4,8 @@
   "description": "Example server",
   "main": "index.js",
   "scripts": {
-    "generate": "npx ts-generate --model src/models.ts --schemas"
+    "generate": "npx ts-generate --model src/models.ts --schemas",
+    "start": "npm run generate && npx ts-node src/server.ts"
   },
   "keywords": [],
   "author": "",

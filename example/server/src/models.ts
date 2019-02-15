@@ -13,4 +13,5 @@ export interface Todo {
 //@http-rpc(Todo)
 export interface ServiceDefinition {
   createTodo: RequestResponse<createTodoRequest, Todo>;
+  createTodoAsync: RequestResponse<createTodoRequest, Todo>;
 }

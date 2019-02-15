@@ -20,12 +20,13 @@ export default class Client<S> {
       headers['Authorization'] = token;
     }
 
-    const result = await axios.post(uri, body, { headers });
-
-    if (result.status == 200) {
+    try {
+      const result = await axios.post(uri, body, { headers });
       return result.data as R;
-    } else {
-      throw Error(result.error);
+    } catch (e) {
+      throw Error(
+        `Status Code ${e.response.status}: ${JSON.stringify(e.response.data, null, '\t')}`
+      );
     }
   }
 }
