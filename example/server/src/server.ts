@@ -10,3 +10,8 @@ server.rpc('createTodo', (req, res) => {
     description: req.body.description,
   });
 });
+
+server
+  .start()
+  .then(r => console.log('Started server...'))
+  .catch(e => new Error(e));
