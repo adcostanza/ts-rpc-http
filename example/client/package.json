@@ -1,0 +1,19 @@
+{
+  "name": "server-example",
+  "version": "0.0.1",
+  "description": "Example server",
+  "main": "index.js",
+  "scripts": {
+    "generate": "npx ts-generate --model src/models.ts --clients clients.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "typescript": "^3.3.3"
+  },
+  "dependencies": {
+    "ts-node": "^8.0.2",
+    "ts-rpc-http": "0.0.31"
+  }
+}

@@ -1,4 +1,3 @@
-import { Observable } from 'rxjs/Observable';
 import Client from 'ts-rpc-http/client';
 import { 
     {{#each imports}}
@@ -14,10 +13,11 @@ export class {{serviceName}}Client {
   }
 
   {{#each routes}}
-  public {{routeName}}$ = (
+  public {{routeName}} = async (
     body: {{request}},
     token?: string
-  ): Observable<{{response}}> => this.client.call('{{routeName}}', body, token);
+  ): Promise<{{response}}> => this.client.call('{{routeName}}', body, token);
+  
   {{/each}}
 }
 {{/each}}

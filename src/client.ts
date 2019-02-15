@@ -1,7 +1,5 @@
-import { Observable } from 'rxjs/Observable';
-import { ajax } from 'rxjs/observable/dom/ajax';
-import { map } from 'rxjs/operators/map';
-import { ResponseType, RequestType } from './requestResponse';
+const axios = require('axios');
+import { RequestType, ResponseType } from './requestResponse';
 
 export default class Client<S> {
   private baseURL: string = '';
@@ -10,19 +8,25 @@ export default class Client<S> {
     this.baseURL = baseURL;
   }
 
-  call<T extends keyof S, R = ResponseType<S[T]>>(
+  async call<T extends keyof S, R = ResponseType<S[T]>>(
     name: T,
     body: RequestType<S[T]>,
     token?: string
-  ): Observable<R> {
-    let headers = { 'Content-Type': 'application/json' };
+  ): Promise<R> {
+    const uri = this.baseURL + '/' + name;
+
+    const headers = { 'Content-Type': 'application/json' };
     if (token !== undefined) {
       headers['Authorization'] = token;
     }
-    const url = this.baseURL + '/' + name;
 
-    return ajax({ url, body, headers, method: 'POST' }).pipe(
-      map(res => res.response as R)
-    );
+    try {
+      const result = await axios.post(uri, body, { headers });
+      return result.data as R;
+    } catch (e) {
+      throw Error(
+        `Status Code ${e.response.status}: ${JSON.stringify(e.response.data, null, '\t')}`
+      );
+    }
   }
 }

@@ -1,14 +1,15 @@
 import * as bodyParser from 'body-parser'; //used to parse the form data that you pass in the request
 import * as express from 'express';
-import { Request, RequestType, Response, ResponseType } from './requestResponse';
-import { Observable } from 'rxjs/Observable';
 import * as http from 'http';
-import { validateRequest } from './validator';
 import * as path from 'path';
-
+const util = require('util');
+import { Request, RequestType, Response, ResponseType } from './requestResponse';
+import { validateRequest } from './validator';
 var cors = require('cors');
 //@ts-ignore
 global.XMLHttpRequest = require('xmlhttprequest').XMLHttpRequest;
+
+type ReturnType<X> = X extends (req: any, res: any) => infer T ? T : never;
 
 export class Server<T> {
   private app: express.Express;
@@ -27,7 +28,7 @@ export class Server<T> {
     closure: (
       req: Request<RequestType<B>>,
       res: Response<ResponseType<B>>
-    ) => express.Response | void
+    ) => express.Response | void | Promise<express.Response> | Promise<void>
   ) {
     this.app.post(('/' + routeName) as string, (expressReq, expressRes) => {
       return closure(new Request(expressReq), new Response(expressRes));
@@ -51,40 +52,30 @@ export class Server<T> {
         validateRequest(req.body, schemaFile);
         next();
       } catch (e) {
-        res.status(400).send({error: e.message})
+        res.status(400).send({ error: e.message });
       }
     });
   };
 
-  start(): Observable<Server<T>> {
-    return Observable.create(observer => {
-      try {
-        this.server = this.app.listen(this.port, () => {
-          console.log(`server started at http://localhost:${this.port}`);
-        });
-
-        observer.next(this);
-        observer.complete();
-      } catch (e) {
-        observer.error(e);
-        observer.complete();
-      }
-    });
-    // start the express server
+  async start(): Promise<Server<T>> {
+    try {
+      return await new Promise((success, err) =>
+        this.app.listen(this.port, server => {
+          console.log(`Server started on port ${this.port}...`);
+          success(server);
+        })
+      );
+    } catch (e) {
+      throw Error(e);
+    }
   }
 
-  close(): Observable<void> {
-    return Observable.create(observer => {
-      try {
-        this.server.close(() => {
-          observer.next();
-          observer.complete();
-        });
-      } catch (e) {
-        observer.error(e);
-        observer.complete();
-      }
-    });
+  async close(): Promise<void> {
+    try {
+      await util.promisify(this.server.close());
+    } catch (e) {
+      throw Error(e);
+    }
   }
 
   private config(): void {
