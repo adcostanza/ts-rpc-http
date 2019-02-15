@@ -9,7 +9,7 @@ program
   .version('0.0.20')
   .allowUnknownOption()
   .option('--model <model>', 'Specify model file')
-  .option('--client <client>', 'Generate a client in the same directory as the model')
+  .option('--clients <clients>', 'The file for the generated clients in the same directory as the models')
   .option('--schemas', 'Generate json schemas') //TODO make folder selectable
   .parse(process.argv);
 
@@ -18,7 +18,7 @@ if (program.model == null || program.model == '') {
 }
 
 const modelsLocation = program.model;
-const generatedName = program.client;
+const generatedName = program.clients;
 
 console.log(modelsLocation, generatedName);
 
@@ -46,7 +46,7 @@ const leftOf = (needle: string, haystack: string): string => {
     .trim();
 };
 
-if ((program.client != null && program.client != '') || program.schemas) {
+if ((program.clients != null && program.clients != '') || program.schemas) {
   const split1 = modelsLocation.split('/');
   const folder = split1.slice(0, split1.length - 1).join('/');
   const data = fs.readFileSync(modelsLocation, 'utf-8');
@@ -129,7 +129,7 @@ if ((program.client != null && program.client != '') || program.schemas) {
     )
   );
 
-  if (program.client != null && program.client != '') {
+  if (program.clients != null && program.clients != '') {
     console.log(imports);
 
     const templateText = fs.readFileSync(

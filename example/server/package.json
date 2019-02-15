@@ -4,7 +4,7 @@
   "description": "Example server",
   "main": "index.js",
   "scripts": {
-    "build": "npx ts-generate models.ts clients.ts"
+    "generate": "npx ts-generate --model src/models.ts --schemas"
   },
   "keywords": [],
   "author": "",
@@ -13,6 +13,6 @@
     "typescript": "^3.3.1"
   },
   "dependencies": {
-    "ts-rpc-http": "0.0.29"
+    "ts-rpc-http": "0.0.30"
   }
 }
