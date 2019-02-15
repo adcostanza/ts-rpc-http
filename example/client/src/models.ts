@@ -1,4 +1,4 @@
-import { RequestResponse } from '../src/requestResponse';
+import { RequestResponse } from 'ts-rpc-http/requestResponse';
 
 export interface createTodoRequest {
   description: string;
@@ -10,15 +10,7 @@ export interface Todo {
   dateCreated: Date;
 }
 
-export interface createWithReallyLongNameThatWillCauseWrappingRequest {}
-export interface createWithReallyLongNameThatWillCauseWrappingResponse {}
-
 //@http-rpc(Todo)
 export interface ServiceDefinition {
   createTodo: RequestResponse<createTodoRequest, Todo>;
-  reallyLongCreateThatWillCauseALotOfWrapping: RequestResponse<
-    createWithReallyLongNameThatWillCauseWrappingRequest, //comment on right side
-    createWithReallyLongNameThatWillCauseWrappingResponse
-  >;
-  //inProgress: comment...
 }

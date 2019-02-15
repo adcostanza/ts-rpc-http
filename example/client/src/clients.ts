@@ -3,8 +3,6 @@ import {
   ServiceDefinition,
   createTodoRequest,
   Todo,
-  createWithReallyLongNameThatWillCauseWrappingRequest,
-  createWithReallyLongNameThatWillCauseWrappingResponse,
 } from './models';
 
 export class TodoClient {
@@ -17,10 +15,5 @@ export class TodoClient {
     body: createTodoRequest,
     token?: string
   ): Promise<Todo> => this.client.call('createTodo', body, token);
-  
-  public reallyLongCreateThatWillCauseALotOfWrapping = async (
-    body: createWithReallyLongNameThatWillCauseWrappingRequest,
-    token?: string
-  ): Promise<createWithReallyLongNameThatWillCauseWrappingResponse> => this.client.call('reallyLongCreateThatWillCauseALotOfWrapping', body, token);
   
 }
