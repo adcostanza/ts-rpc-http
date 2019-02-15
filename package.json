@@ -25,6 +25,7 @@
     "@types/axios": "^0.14.0",
     "axios": "^0.18.0",
     "body-parser": "^1.18.3",
+    "commander": "^2.19.0",
     "cors": "^2.8.5",
     "express": "^4.16.4",
     "handlebars": "^4.0.12",

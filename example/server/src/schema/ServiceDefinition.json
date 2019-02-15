@@ -17,33 +17,14 @@
             ],
             "type": "object"
         },
-        "RequestResponse<createWithReallyLongNameThatWillCauseWrappingRequest,createWithReallyLongNameThatWillCauseWrappingResponse>": {
-            "properties": {
-                "request": {
-                    "$ref": "#/definitions/createWithReallyLongNameThatWillCauseWrappingRequest"
-                },
-                "response": {
-                    "$ref": "#/definitions/createWithReallyLongNameThatWillCauseWrappingResponse"
-                }
-            },
-            "required": [
-                "request",
-                "response"
-            ],
-            "type": "object"
-        },
         "ServiceDefinition": {
             "properties": {
                 "createTodo": {
                     "$ref": "#/definitions/RequestResponse<createTodoRequest,Todo>"
-                },
-                "reallyLongCreateThatWillCauseALotOfWrapping": {
-                    "$ref": "#/definitions/RequestResponse<createWithReallyLongNameThatWillCauseWrappingRequest,createWithReallyLongNameThatWillCauseWrappingResponse>"
                 }
             },
             "required": [
-                "createTodo",
-                "reallyLongCreateThatWillCauseALotOfWrapping"
+                "createTodo"
             ],
             "type": "object"
         },
@@ -77,12 +58,6 @@
             "required": [
                 "description"
             ],
-            "type": "object"
-        },
-        "createWithReallyLongNameThatWillCauseWrappingRequest": {
-            "type": "object"
-        },
-        "createWithReallyLongNameThatWillCauseWrappingResponse": {
             "type": "object"
         }
     }
