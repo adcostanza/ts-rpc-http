@@ -20,12 +20,13 @@ server.rpc('createTodoAsync', async (req, res) => {
 });
 
 server.rpc('createTodo', (req, res) => {
-  res.status(200).send({
+  return res.status(200).send({
     id: 'taco',
     dateCreated: new Date(),
     description: req.body.description,
   });
 });
+
 
 server
   .start()

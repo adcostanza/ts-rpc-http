@@ -15,6 +15,6 @@
   },
   "dependencies": {
     "ts-node": "^8.0.2",
-    "ts-rpc-http": "0.0.31"
+    "ts-rpc-http": "0.0.32"
   }
 }
