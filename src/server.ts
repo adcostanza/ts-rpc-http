@@ -28,10 +28,24 @@ export class Server<T> {
     closure: (
       req: Request<RequestType<B>>,
       res: Response<ResponseType<B>>
-    ) => express.Response | void | Promise<express.Response> | Promise<void>
+    ) => express.Response | Promise<express.Response> | Promise<void>
   ) {
-    this.app.post(('/' + routeName) as string, (expressReq, expressRes) => {
-      return closure(new Request(expressReq), new Response(expressRes));
+    this.app.post(('/' + routeName) as string, async (expressReq, expressRes) => {
+      const result = closure(new Request(expressReq), new Response(expressRes));
+      //if the result is a promise, wait for it
+      if (result instanceof Promise) {
+        //need to check if headers were ever sent after the completed promise
+        const completedPromise = await result;
+        if (expressRes.headersSent) {
+          return completedPromise;
+        } else {
+          //no headers sent
+          expressRes.status(501).send({ error: 'Not implemented.' });
+        }
+      }
+
+      //if not a promise, just return the result
+      return result;
     });
   }
 

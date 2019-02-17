@@ -14,4 +14,5 @@ export interface Todo {
 export interface ServiceDefinition {
   createTodo: RequestResponse<createTodoRequest, Todo>;
   createTodoAsync: RequestResponse<createTodoRequest, Todo>;
+  createPotato: RequestResponse<createTodoRequest, Todo>;
 }

@@ -21,4 +21,9 @@ export class TodoClient {
     token?: string
   ): Promise<Todo> => this.client.call('createTodoAsync', body, token);
   
+  public createPotato = async (
+    body: createTodoRequest,
+    token?: string
+  ): Promise<Todo> => this.client.call('createPotato', body, token);
+  
 }
