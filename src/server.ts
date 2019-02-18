@@ -59,23 +59,36 @@ export class Server<T> {
 
   async start(): Promise<Server<T>> {
     try {
-      return await new Promise((success, err) =>
-        this.app.listen(this.port, server => {
-          console.log(`Server started on port ${this.port}...`);
-          success(server);
-        })
-      );
+      const server: http.Server = await new Promise((resolve, reject) => {
+        try {
+          const _server = this.app.listen(this.port, () => {
+            console.log(`Server started on port ${this.port}...`);
+            resolve(_server);
+          });
+        } catch (e) {
+          reject(e);
+        }
+      });
+
+      this.server = server;
+
+      return this;
     } catch (e) {
       throw Error(e);
     }
   }
 
   async close(): Promise<void> {
-    try {
-      await util.promisify(this.server.close());
-    } catch (e) {
-      throw Error(e);
-    }
+    return new Promise((resolve, reject) => {
+      try {
+        console.log(this.server);
+        this.server.close(() => {
+          resolve();
+        });
+      } catch (e) {
+        reject(e);
+      }
+    });
   }
 
   private config(): void {
