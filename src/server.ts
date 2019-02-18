@@ -30,7 +30,7 @@ export class Server<T> {
       res: Response<ResponseType<B>>
     ) => express.Response | void | Promise<express.Response> | Promise<void>
   ) {
-    this.app.post(('/' + routeName) as string, async (expressReq, expressRes) => {
+    this.app.post(('/' + routeName) as string, (expressReq, expressRes) => {
       return closure(new Request(expressReq), new Response(expressRes));
     });
   }
