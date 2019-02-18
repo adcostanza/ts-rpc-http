@@ -1,6 +1,10 @@
 import { TodoClient } from './clients';
 
 const client = new TodoClient('http://localhost:5001');
+client.createTodo({description: 'potato'})
+.then(r => {
+
+})
 
 client
   .createTodo({ description: 'Eat a taco' })

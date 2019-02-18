@@ -3,7 +3,7 @@ import { Server } from 'ts-rpc-http/server';
 
 const server = new Server<ServiceDefinition>();
 
-//validate schemas per the schema folder
+//validate schemas per the schema folder (optional)
 server.validateSchemas('/src/schema');
 
 server.rpc('createTodoAsync', async (req, res) => {
@@ -13,15 +13,15 @@ server.rpc('createTodoAsync', async (req, res) => {
   });
 
   res.status(200).send({
-    id: 'random-id',
+    id: 'taco',
     dateCreated: new Date(),
     description,
   });
 });
 
 server.rpc('createTodo', (req, res) => {
-  res.status(200).send({
-    id: 'random-id',
+  return res.status(200).send({
+    id: 'taco',
     dateCreated: new Date(),
     description: req.body.description,
   });
