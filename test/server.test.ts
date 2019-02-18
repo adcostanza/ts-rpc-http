@@ -1,6 +1,6 @@
-import { TodoClient } from './../example/client/src/clients';
 import { ServiceDefinition } from './models';
 import { Server } from '../src/server';
+import { TodoClient } from './clients';
 const util = require('util');
 const exec = util.promisify(require('child_process').exec);
 const path = require('path');
