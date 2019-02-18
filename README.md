@@ -28,7 +28,7 @@ export interface ServiceDefinition {
 
 ## Server
 
-It is a small wrapper around express that provides typing of the request body that is sent in JSON. It also provides optional automatic validation through use of generated JSONSchemas.
+The `Server` is a small wrapper around express that provides typing of the request body that is sent in JSON. It also provides optional automatic validation through use of generated JSONSchemas.
 
 If you want to generate JSONSchema files for automatic validation, go ahead and run this command:
 
@@ -79,4 +79,34 @@ server
 
 ## Client
 
-The client is completely generated so it makes it extremely easy to use in your front end. All you need to do is copy the same models to your frontend and you can generate it there, or generate it with the server and provide it as a library.
+There is a base `Client` that can be used to make basic calls to the API, but the preferred way is to use the generated clients, making. All you need to do is copy the same models to your frontend and you can generate it there, or generate the clients with the server and provide it as a library.
+
+To generate a client, type the following:
+
+```
+npx ts-node --model src/models.ts --clients clients.ts
+```
+
+Which will generate as many clients as you have service definitions and put them in a file called `clients.ts` in the same directory as `src/models.ts` which in this case is `src/`. it may look something like the following:
+
+```
+import Client from 'ts-rpc-http/client';
+import {
+  ServiceDefinition,
+  createTodoRequest,
+  Todo,
+} from './models';
+
+export class TodoClient {
+  private client: Client<ServiceDefinition>;
+  constructor(baseURL: string) {
+    this.client = new Client(baseURL);
+  }
+
+  public createTodo = async (
+    body: createTodoRequest,
+    token?: string
+  ): Promise<Todo> => this.client.call('createTodo', body, token);
+
+}
+```

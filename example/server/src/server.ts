@@ -27,7 +27,6 @@ server.rpc('createTodo', (req, res) => {
   });
 });
 
-
 server
   .start()
   .then(r => console.log('Started server...'))
