@@ -81,7 +81,6 @@ export class Server<T> {
   async close(): Promise<void> {
     return new Promise((resolve, reject) => {
       try {
-        console.log(this.server);
         this.server.close(() => {
           resolve();
         });
