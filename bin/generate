@@ -1,2 +1,2 @@
 #!/usr/bin/env node
-require('../generator.js')
+require('../cli.js')
