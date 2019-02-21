@@ -3,7 +3,7 @@ import { Server } from '../../src/server';
 
 const path = require('path');
 
-describe('the server', () => {
+describe('server unit test', () => {
   test('starts and stops', async () => {
     const server = new Server<ServiceDefinition>();
     await server.start();
