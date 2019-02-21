@@ -1,7 +1,7 @@
 {
-  "name": "server-example",
+  "name": "client-example",
   "version": "0.0.1",
-  "description": "Example server",
+  "description": "Example client",
   "main": "index.js",
   "scripts": {
     "generate": "npx ts-generate --model src/models.ts --clients clients.ts"
