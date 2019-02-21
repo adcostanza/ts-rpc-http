@@ -4,3 +4,5 @@ dist
 .code
 .idea
 .DS_Store
+test/integration/generation/schema
+test/integration/generation/clients.ts
