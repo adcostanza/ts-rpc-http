@@ -39,6 +39,7 @@
     "jest": "^24.1.0",
     "jsonschema": "^1.2.4",
     "lodash": "^4.17.11",
+    "prettier": "^1.16.4",
     "typescript-json-schema": "^0.35.0",
     "xmlhttprequest": "^1.8.0"
   }

@@ -3,3 +3,4 @@ dist
 .vscode
 .code
 .idea
+.DS_Store
