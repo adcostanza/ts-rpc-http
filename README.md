@@ -17,6 +17,14 @@ The response is also typed, ensuring our contract between server and client.
 Beyond the type hints provided, ts-rpc-http also provides safety in that it will alert you
 if the response you are sending is invalid per the api contract:
 ![](images/serverSendError.png)
+
+### Automatic Request Validation
+By generating JSON schemas, your requests can be automatically validated with a small piece of 
+middleware.
+
+### Automatic Client Generation
+A client is generated for you that works directly with Promise, making it 
+extremely easy to get started on the frontend once the api service is available for consumption.
 ## Model
 
 It all starts with a model file, where you define all of your basic data model types and one or more service definitions with this comment tagging them on the line above `//@http-rpc(<serviceName>)`. Here is a simple example:
