@@ -2,6 +2,8 @@ import * as fs from "fs";
 import * as handlebars from "handlebars";
 import * as _ from "lodash";
 
+const util = require("util");
+const exec = util.promisify(require("child_process").exec);
 const path = require("path");
 
 export interface ProgramInterface {
@@ -9,6 +11,50 @@ export interface ProgramInterface {
     clients?: string;
     schemas?: boolean;
 }
+
+const deleteFolderRecursive = function (path) {
+    if (fs.existsSync(path)) {
+        fs.readdirSync(path).forEach(function (file, index) {
+            let curPath = path + "/" + file;
+            if (fs.lstatSync(curPath).isDirectory()) {
+                // recurse
+                deleteFolderRecursive(curPath);
+            } else {
+                // delete file
+                fs.unlinkSync(curPath);
+            }
+        });
+        fs.rmdirSync(path);
+    }
+};
+
+const generateSchema = async (type: string, modelsLocation: string, folder: string) => {
+    const cmd = `npx typescript-json-schema ${modelsLocation} ${type} --required --topRef -o ${folder}/schema/${type}.json`;
+    console.log("Running command");
+    console.log(cmd);
+    const {stdout, stderr} = await exec(cmd);
+    if (stderr != "") {
+        console.log(stderr);
+    }
+}
+
+const generateSchemas = async (types: string[], modelsLocation: string, folder: string) => {
+    await Promise.all(types.map(type => generateSchema(type, modelsLocation, folder)));
+}
+
+const generateJSONSchemas = async (types: string[], modelsLocation: string, folder: string) => {
+    console.log("Generating JSON schemas...");
+    const makeSchemaDirectory = () => fs.mkdirSync(`${folder}/schema`);
+    try {
+        makeSchemaDirectory();
+    } catch (e) {
+        deleteFolderRecursive(`${folder}/schema`);
+        makeSchemaDirectory();
+    }
+
+    await generateSchemas(types, modelsLocation, folder);
+}
+
 
 export const generate = (program: ProgramInterface) => {
     return new Promise((resolve, reject) => {
@@ -158,51 +204,9 @@ export const generate = (program: ProgramInterface) => {
 
             if (program.schemas) {
                 //now let's also generate json schemas
-                console.log("Generating JSON schemas...");
-                const util = require("util");
-                const exec = util.promisify(require("child_process").exec);
-
-                var deleteFolderRecursive = function (path) {
-                    if (fs.existsSync(path)) {
-                        fs.readdirSync(path).forEach(function (file, index) {
-                            var curPath = path + "/" + file;
-                            if (fs.lstatSync(curPath).isDirectory()) {
-                                // recurse
-                                deleteFolderRecursive(curPath);
-                            } else {
-                                // delete file
-                                fs.unlinkSync(curPath);
-                            }
-                        });
-                        fs.rmdirSync(path);
-                    }
-                };
-
-                const makeSchemaDirectory = () => fs.mkdirSync(`${folder}/schema`);
-                try {
-                    makeSchemaDirectory();
-                } catch (e) {
-                    deleteFolderRecursive(`${folder}/schema`);
-                    makeSchemaDirectory();
-                }
-
-                async function generateSchema(type: string) {
-                    const cmd = `npx typescript-json-schema ${modelsLocation} ${type} --required --topRef -o ${folder}/schema/${type}.json`;
-                    console.log("Running command");
-                    console.log(cmd);
-                    const {stdout, stderr} = await exec(cmd);
-                    if (stderr != "") {
-                        console.log(stderr);
-                    }
-                }
-
-                imports.forEach(current => {
-                    generateSchema(current)
-                        .then(r => {
-                            resolve();
-                        })
-                        .catch(reject);
-                });
+                generateJSONSchemas(imports, modelsLocation, folder)
+                    .then(r => resolve())
+                    .catch(reject);
             }
         }
     });
