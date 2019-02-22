@@ -12,10 +12,10 @@ export interface ProgramInterface {
   schemas?: boolean;
 }
 
-const deleteFolderRecursive = function(path) {
-  if (fs.existsSync(path)) {
-    fs.readdirSync(path).forEach(function(file, index) {
-      let curPath = path + "/" + file;
+const deleteFolderRecursive = function(_path) {
+  if (fs.existsSync(_path)) {
+    fs.readdirSync(_path).forEach(function(file, index) {
+      let curPath = path.resolve(_path, file);
       if (fs.lstatSync(curPath).isDirectory()) {
         // recurse
         deleteFolderRecursive(curPath);
@@ -24,7 +24,7 @@ const deleteFolderRecursive = function(path) {
         fs.unlinkSync(curPath);
       }
     });
-    fs.rmdirSync(path);
+    fs.rmdirSync(_path);
   }
 };
 
@@ -33,7 +33,8 @@ const generateSchema = async (
   modelsLocation: string,
   folder: string
 ) => {
-  const cmd = `npx typescript-json-schema ${modelsLocation} ${type} --required --topRef -o ${folder}/schema/${type}.json`;
+  const schemaLocation = path.resolve(folder, "schema", `${type}.json`);
+  const cmd = `npx typescript-json-schema ${modelsLocation} ${type} --required --topRef -o ${schemaLocation}`;
   console.log("Running command");
   console.log(cmd);
   const { stdout, stderr } = await exec(cmd);
@@ -58,11 +59,12 @@ const generateJSONSchemas = async (
   folder: string
 ) => {
   console.log("Generating JSON schemas...");
-  const makeSchemaDirectory = () => fs.mkdirSync(`${folder}/schema`);
+  const makeSchemaDirectory = () =>
+    fs.mkdirSync(path.resolve(folder, "schema"));
   try {
     makeSchemaDirectory();
   } catch (e) {
-    deleteFolderRecursive(`${folder}/schema`);
+    deleteFolderRecursive(path.resolve(folder, "schema"));
     makeSchemaDirectory();
   }
 
@@ -105,8 +107,7 @@ export const generate = (program: ProgramInterface) => {
     };
 
     if ((program.clients != null && program.clients != "") || program.schemas) {
-      const split1 = modelsLocation.split("/");
-      const folder = split1.slice(0, split1.length - 1).join("/");
+      const folder = path.resolve(modelsLocation, "..");
       const data = fs.readFileSync(modelsLocation, "utf-8");
       const lines = data.split("\n");
       let onDefinition = false;
@@ -205,7 +206,7 @@ export const generate = (program: ProgramInterface) => {
         );
         const template = handlebars.compile(templateText);
         const generated = template({ services: templateMap, imports });
-        const generatePath = folder + "/" + generatedName;
+        const generatePath = path.resolve(folder, generatedName);
 
         fs.writeFile(generatePath, generated, err => {
           console.log(err || "");
