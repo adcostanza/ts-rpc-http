@@ -2,10 +2,6 @@ import { Server } from "../../src/server";
 import { TodoClient } from "../clients";
 import { ServiceDefinition } from "../models";
 
-const util = require("util");
-const exec = util.promisify(require("child_process").exec);
-const path = require("path");
-
 describe("server/client integration", () => {
   let server;
 
