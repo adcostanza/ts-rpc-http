@@ -19,11 +19,18 @@ if the response you are sending is invalid per the api contract:
 
 ### Automatic Request Validation
 By generating JSON schemas, your requests can be automatically validated with a small piece of 
-middleware.
+middleware. Below is an example of JSONSchema generation:
+```
+npx ts-generate --model src/models.ts --schemas
+```
 
 ### Automatic Client Generation
 A client is generated for you that works directly with Promise, making it 
-extremely easy to get started on the frontend once the api service is available for consumption.
+extremely easy to get started on the frontend once the api service is available for consumption. Below is an example client generation command:
+```
+npx ts-generate --model src/models.ts --clients clients.ts
+```
+
 ## Model
 
 It all starts with a model file, where you define all of your basic data model types and one or more service definitions with this comment tagging them on the line above `//@http-rpc(<serviceName>)`. Here is a simple example:
@@ -106,7 +113,7 @@ There is a base `Client` that can be used to make basic calls to the API, but th
 To generate a client, type the following:
 
 ```
-npx ts-node --model src/models.ts --clients clients.ts
+npx ts-generate --model src/models.ts --clients clients.ts
 ```
 
 Which will generate as many clients as you have service definitions and put them in a file called `clients.ts` in the same directory as `src/models.ts` which in this case is `src/`. it may look something like the following:
