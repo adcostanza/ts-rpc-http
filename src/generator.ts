@@ -73,14 +73,8 @@ const generateJSONSchemas = async (
 
 export const generate = (program: ProgramInterface) => {
   return new Promise((resolve, reject) => {
-    if (program.model == null || program.model == "") {
-      reject("--model is required");
-    }
-
     const modelsLocation = program.model;
     const generatedName = program.clients;
-
-    console.log(modelsLocation, generatedName);
 
     /**
      * returns the right side of the first occurence of the needle in the haystack
