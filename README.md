@@ -1,6 +1,6 @@
 # Typesafe HTTP JSON RPC API with TypeScript
 [![Coverage Status](https://img.shields.io/coveralls/github/adcostanza/ts-rpc-http/master.svg)](https://coveralls.io/github/adcostanza/ts-rpc-http?branch=master)
-![](https://img.shields.io/github/languages/top/adcostanza/ts-rpc-http/master.svg)
+![](https://img.shields.io/github/languages/top/adcostanza/ts-rpc-http.svg)
 
 This small set of utilies makes it very easy to create an RPC API that is definined completely in TypeScript along with a generated client and optional automated api validation.
 
