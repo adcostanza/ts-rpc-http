@@ -7,8 +7,8 @@
     "build": "rm -Rf dist && tsc && cp src/template.handlebars dist/",
     "package": "npm run build && cp package.json dist && cp README.md dist && cp -R bin dist && cd dist && npm pack",
     "publish": "npm run package && cd dist && npm publish ts-rpc-http*.tgz",
-    "generateTestClients": "ts-node src/generator.ts --model test/models.ts --clients clients.ts && npm run rewrite",
-    "generateJsonSchemas": "ts-node src/generator.ts --model test/models.ts --schemas",
+    "generateTestClients": "ts-node src/cli.ts --model test/models.ts --clients clients.ts",
+    "generateJsonSchemas": "ts-node src/cli.ts --model test/models.ts --schemas",
     "coveralls": "jest test --coverage && cat ./coverage/lcov.info | coveralls",
     "test": "jest test"
   },

@@ -1,16 +1,20 @@
-import { RequestResponse } from '../src/requestResponse';
+import {RequestResponse} from '../src/requestResponse';
 
 export interface createTodoRequest {
-  description: string;
+    description: string;
+}
+
+export interface createTodoAsyncRequest extends createTodoRequest {
 }
 
 export interface Todo {
-  id: string;
-  description: string;
-  dateCreated: Date;
+    id: string;
+    description: string;
+    dateCreated: Date;
 }
 
 //@http-rpc(Todo)
 export interface ServiceDefinition {
-  createTodo: RequestResponse<createTodoRequest, Todo>;
+    createTodo: RequestResponse<createTodoRequest, Todo>;
+    createTodoAsync: RequestResponse<createTodoAsyncRequest, Todo>;
 }

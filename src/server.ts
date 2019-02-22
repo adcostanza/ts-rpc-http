@@ -54,6 +54,7 @@ export class Server<T> {
             throw new Error("validateSchemas must come before any rpc declaration, not after")
         }
         return this.middleware((req, res, next) => {
+            //TODO need a better way that doesn't require convention
             const schemaFile = path.join(process.env.PWD, schemaPath, `${req.url}Request.json`);
             //will throw error for validation errors
             try {
