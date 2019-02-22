@@ -1,5 +1,5 @@
 # Typesafe HTTP JSON RPC API with TypeScript
-
+![](https://img.shields.io/github/package-json/v/adcostanza/ts-rpc-http.svg)
 ![](https://img.shields.io/github/languages/top/adcostanza/ts-rpc-http.svg)
 [![Coverage Status](https://img.shields.io/coveralls/github/adcostanza/ts-rpc-http/master.svg)](https://coveralls.io/github/adcostanza/ts-rpc-http?branch=master)
 ![](https://img.shields.io/github/issues-pr-closed-raw/adcostanza/ts-rpc-http.svg)
