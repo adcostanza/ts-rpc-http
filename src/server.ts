@@ -60,7 +60,7 @@ export class Server<T> {
     return this.middleware((req, res, next) => {
       //TODO need a better way that doesn't require convention
       const schemaFile = path.join(
-        process.env.PWD,
+        process.cwd(),
         schemaPath,
         `${req.url}Request.json`
       );
