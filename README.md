@@ -10,7 +10,7 @@ This small set of utilies makes it very easy to create an RPC API that is defini
 # Installation 
 Install from NPM with the following:
 ```
-npm i ts-rpc-http --save
+npm i ts-rpc-http
 ```
 
 ## Motivation
