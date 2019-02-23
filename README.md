@@ -7,6 +7,12 @@
 
 This small set of utilies makes it very easy to create an RPC API that is definined completely in TypeScript along with a generated client and optional automated api validation.
 
+# Installation 
+Install from NPM with the following:
+```
+npm i ts-rpc-http --save
+```
+
 ## Motivation
 ### Type Hints 
 ts-rpc-http gives you type hints for all of your rpc routes on the server, enabling you to 
