@@ -1,6 +1,6 @@
 {
   "name": "ts-rpc-http",
-  "version": "0.0.37",
+  "version": "0.0.38",
   "description": "Quickly generate a typesafe RPC API over HTTP with Express along with a typesafe rxjs client",
   "main": "index.js",
   "scripts": {
