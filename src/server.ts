@@ -58,7 +58,7 @@ export class Server<T> {
       );
     }
     return this.middleware((req, res, next) => {
-      if (whitelist && whitelist.indexOf(req.route.path) >= 0) {
+      if (whitelist && whitelist.indexOf(req.url) >= 0) {
         return next();
       }
       //TODO need a better way that doesn't require convention
