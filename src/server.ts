@@ -49,7 +49,7 @@ export class Server<T> {
   }
 
   //Note all requests must end with Request for this to work
-  validateSchemas = (schemaPath: string) => {
+  validateSchemas = (schemaPath: string, whitelist?: string[]) => {
     //should be 5 if no routes have been added
     const routerStackSize = this.app._router.stack.length;
     if (routerStackSize > 5) {
@@ -58,6 +58,9 @@ export class Server<T> {
       );
     }
     return this.middleware((req, res, next) => {
+      if (whitelist && whitelist.indexOf(req.route.path) >= 0) {
+        return next();
+      }
       //TODO need a better way that doesn't require convention
       const schemaFile = path.join(
         process.cwd(),
