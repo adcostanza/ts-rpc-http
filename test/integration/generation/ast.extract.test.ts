@@ -34,10 +34,6 @@ test("extract via ast", async () => {
         throw Error("cannot have RPC service extend more than one interface");
       }
 
-      if (currentService != undefined) {
-        services.push(currentService);
-      }
-
       currentService = { calls: [] };
       //look for heritage clause to RPCService
       const heritageClause = node.heritageClauses[0];
@@ -56,6 +52,8 @@ test("extract via ast", async () => {
           response: res
         });
       });
+
+      services.push(currentService);
     }
   };
 
@@ -72,5 +70,5 @@ test("extract via ast", async () => {
 
   ts.forEachChild(source, visitInterfaceDeclaration);
 
-  console.log(currentService);
+  console.log(services);
 });

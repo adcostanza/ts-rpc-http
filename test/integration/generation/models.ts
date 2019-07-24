@@ -23,3 +23,8 @@ export interface ServiceDefinition extends RPCService<"Todo"> { //can resolve "T
   createTodo?: RequestResponse<createTodoRequest, Todo>;
   createPotato?: RequestResponse<createTodoRequest, Potato>;
 }
+
+export interface ServiceDefinition2 extends RPCService<"Potato"> { //can resolve "Todo" with ts compiler
+  createPotatoes?: RequestResponse<createTodoRequest, Todo>;
+  createTomatoes?: RequestResponse<createTodoRequest, Potato>;
+}
