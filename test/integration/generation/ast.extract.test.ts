@@ -43,14 +43,21 @@ test("extract via ast", async () => {
         const propertyChildren = propertySignature.getChildren();
         const identifier = propertyChildren.find(ts.isIdentifier).getText();
         const reqRes = propertyChildren.find(ts.isTypeReferenceNode);
-        const typeArguments = reqRes.typeArguments;
-        const [req, res] = typeArguments.map(o => o.getText());
+        if (
+          reqRes
+            .getChildren()
+            .find(ts.isIdentifier)
+            .getText() === "RequestResponse"
+        ) {
+          const typeArguments = reqRes.typeArguments;
+          const [req, res] = typeArguments.map(o => o.getText());
 
-        currentService.calls.push({
-          name: identifier,
-          request: req,
-          response: res
-        });
+          currentService.calls.push({
+            name: identifier,
+            request: req,
+            response: res
+          });
+        }
       });
 
       services.push(currentService);
