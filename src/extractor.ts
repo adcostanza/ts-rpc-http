@@ -1,4 +1,4 @@
-import { HandlebarsTemplate, Service } from "./generator";
+import {HandlebarsTemplate, Service} from "./generator";
 import * as ts from "typescript";
 
 export const extract = (filePath: string): HandlebarsTemplate => {
@@ -64,8 +64,10 @@ export const extract = (filePath: string): HandlebarsTemplate => {
 
   ts.forEachChild(source, visitInterfaceDeclaration);
 
+  const servicesCleaned = services.filter(service => service.routes.length > 0);
+
   const imports = Array.from(
-    services.reduce((importNames, service) => {
+      servicesCleaned.reduce((importNames, service) => {
       const { serviceDefinitionName } = service;
       service.routes.forEach(route => {
         importNames.add(route.request);
@@ -77,7 +79,7 @@ export const extract = (filePath: string): HandlebarsTemplate => {
   );
 
   const handlebarsData: HandlebarsTemplate = {
-    services,
+    services: servicesCleaned,
     imports
   };
 
