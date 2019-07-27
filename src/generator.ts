@@ -93,30 +93,6 @@ export const generate = (program: ProgramInterface) => {
     const modelsLocation = program.model;
     const generatedName = program.clients;
 
-    /**
-     * returns the right side of the first occurence of the needle in the haystack
-     * @param needle the string to find
-     * @param haystack the string to find the needle in
-     */
-    const rightOf = (needle: string, haystack: string): string => {
-      return haystack
-        .trim()
-        .split(needle)[1]
-        .trim();
-    };
-
-    /**
-     * returns the left side of the first occurence of the needle in the haystack
-     * @param needle the string to find
-     * @param haystack the string to find the needle in
-     */
-    const leftOf = (needle: string, haystack: string): string => {
-      return haystack
-        .trim()
-        .split(needle)[0]
-        .trim();
-    };
-
     if ((program.clients != null && program.clients != "") || program.schemas) {
       const folder = path.resolve(modelsLocation, "..");
       const data = fs.readFileSync(modelsLocation, "utf-8");
