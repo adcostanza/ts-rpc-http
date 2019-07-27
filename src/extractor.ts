@@ -24,7 +24,9 @@ export const extract = (filePath: string): HandlebarsTemplate => {
 
       node.members.filter(ts.isPropertySignature).forEach(propertySignature => {
         const propertyChildren = propertySignature.getChildren(source);
-        const identifier = propertyChildren.find(ts.isIdentifier).getText(source);
+        const identifier = propertyChildren
+          .find(ts.isIdentifier)
+          .getText(source);
         const reqRes = propertyChildren.find(ts.isTypeReferenceNode);
         if (
           reqRes
@@ -52,7 +54,9 @@ export const extract = (filePath: string): HandlebarsTemplate => {
       const children = node.getChildren(source);
       const identifier = children.find(ts.isIdentifier).getText(source);
       if (identifier === "RPCService") {
-        const serviceName = node.typeArguments[0].getText(source).replace(/"/g, "");
+        const serviceName = node.typeArguments[0]
+          .getText(source)
+          .replace(/"/g, "");
         currentService.serviceName = serviceName;
       }
     }
@@ -60,12 +64,17 @@ export const extract = (filePath: string): HandlebarsTemplate => {
 
   ts.forEachChild(source, visitInterfaceDeclaration);
 
-  const imports = services.reduce((importNames, service) => {
-    const { serviceDefinitionName } = service;
-    const routeNames = service.routes.map(route => route.routeName);
-    importNames.concat([...routeNames, serviceDefinitionName]);
-    return importNames;
-  }, []);
+  const imports = Array.from(
+    services.reduce((importNames, service) => {
+      const { serviceDefinitionName } = service;
+      service.routes.forEach(route => {
+        importNames.add(route.request);
+        importNames.add(route.response);
+      });
+      importNames.add(serviceDefinitionName);
+      return importNames;
+    }, new Set<string>())
+  );
 
   const handlebarsData: HandlebarsTemplate = {
     services,
