@@ -10,7 +10,6 @@ export class Response<T> {
     return this.response.sendStatus(status);
   };
 }
-
 export class ResponseWithStatus<T> {
   constructor(private response: express.Response, private status: number) {}
   send = (body: T) => {
@@ -33,6 +32,11 @@ export interface RequestResponse<T, R> {
   request: T;
   response: R;
 }
+
+export interface RPCService<T> {
+    //this is only used for tracking
+}
+
 export type RequestType<X> = X extends RequestResponse<infer T, infer R> ? T : never;
 export type ResponseType<X> = X extends RequestResponse<infer T, infer R> ? R : never;
 export type ServiceKey<X> = keyof X;
