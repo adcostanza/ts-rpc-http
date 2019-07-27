@@ -23,17 +23,17 @@ export const extract = (filePath: string): HandlebarsTemplate => {
       ts.forEachChild(heritageClause, visitExpressionWithTypeArguments);
 
       node.members.filter(ts.isPropertySignature).forEach(propertySignature => {
-        const propertyChildren = propertySignature.getChildren();
-        const identifier = propertyChildren.find(ts.isIdentifier).getText();
+        const propertyChildren = propertySignature.getChildren(source);
+        const identifier = propertyChildren.find(ts.isIdentifier).getText(source);
         const reqRes = propertyChildren.find(ts.isTypeReferenceNode);
         if (
           reqRes
-            .getChildren()
+            .getChildren(source)
             .find(ts.isIdentifier)
-            .getText() === "RequestResponse"
+            .getText(source) === "RequestResponse"
         ) {
           const typeArguments = reqRes.typeArguments;
-          const [req, res] = typeArguments.map(o => o.getText());
+          const [req, res] = typeArguments.map(o => o.getText(source));
 
           currentService.routes.push({
             routeName: identifier,
@@ -49,10 +49,10 @@ export const extract = (filePath: string): HandlebarsTemplate => {
 
   const visitExpressionWithTypeArguments = (node: ts.Node) => {
     if (ts.isExpressionWithTypeArguments(node)) {
-      const children = node.getChildren();
-      const identifier = children.find(ts.isIdentifier).getText();
+      const children = node.getChildren(source);
+      const identifier = children.find(ts.isIdentifier).getText(source);
       if (identifier === "RPCService") {
-        const serviceName = node.typeArguments[0].getText().replace(/"/g, "");
+        const serviceName = node.typeArguments[0].getText(source).replace(/"/g, "");
         currentService.serviceName = serviceName;
       }
     }
