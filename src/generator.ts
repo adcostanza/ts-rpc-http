@@ -11,6 +11,23 @@ export interface ProgramInterface {
   clients?: string;
   schemas?: boolean;
 }
+export interface Route {
+  routeName: string;
+  request: string;
+  response: string;
+}
+
+export interface Service {
+  serviceName?: string;
+  serviceDefinitionName?: string;
+  routes: Route[];
+}
+
+export interface HandlebarsTemplate {
+  services: Service[];
+  imports: string[];
+}
+export type TemplateMap = Record<string, Service>;
 
 const deleteFolderRecursive = function(_path) {
   if (fs.existsSync(_path)) {
@@ -107,13 +124,7 @@ export const generate = (program: ProgramInterface) => {
       let onDefinition = false;
 
       let accumulatedLines = ""; //can accumulate across newlines
-      interface Service {
-        serviceName: string;
-        serviceDefinitionName: string;
-        routes: { routeName: string; request: string; response: string }[];
-      }
 
-      type TemplateMap = Record<string, Service>;
       const templateMap: TemplateMap = {};
 
       let current = "";

@@ -1,14 +1,6 @@
 import * as ts from "typescript";
+import { Service } from "../../../src/generator";
 
-interface Call {
-  name?: string;
-  request?: string;
-  response?: string;
-}
-interface Service {
-  name?: string;
-  calls: Call[];
-}
 test("extract via ast", async () => {
   // hardcode our input file
   const filePath = "./test/integration/generation/models.ts";
@@ -34,7 +26,11 @@ test("extract via ast", async () => {
         throw Error("cannot have RPC service extend more than one interface");
       }
 
-      currentService = { calls: [] };
+      const serviceDefinitionName = node.name.text;
+      currentService = {
+        routes: [],
+        serviceDefinitionName
+      };
       //look for heritage clause to RPCService
       const heritageClause = node.heritageClauses[0];
       ts.forEachChild(heritageClause, visitExpressionWithTypeArguments);
@@ -52,8 +48,8 @@ test("extract via ast", async () => {
           const typeArguments = reqRes.typeArguments;
           const [req, res] = typeArguments.map(o => o.getText());
 
-          currentService.calls.push({
-            name: identifier,
+          currentService.routes.push({
+            routeName: identifier,
             request: req,
             response: res
           });
@@ -70,7 +66,7 @@ test("extract via ast", async () => {
       const identifier = children.find(ts.isIdentifier).getText();
       if (identifier === "RPCService") {
         const serviceName = node.typeArguments[0].getText().replace(/"/g, "");
-        currentService.name = serviceName;
+        currentService.serviceName = serviceName;
       }
     }
   };
