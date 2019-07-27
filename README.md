@@ -46,7 +46,7 @@ npx ts-generate --model src/models.ts --clients clients.ts
 It all starts with a model file, where you define all of your basic data model types and one or more service definitions with this comment tagging them on the line above `//@http-rpc(<serviceName>)`. Here is a simple example:
 
 ```
-import { RequestResponse } from 'ts-rpc-http/requestResponse';
+import { RequestResponse, RPCService } from 'ts-rpc-http/requestResponse';
 
 export interface createTodoRequest {
   description: string;
@@ -58,8 +58,7 @@ export interface Todo {
   dateCreated: Date;
 }
 
-//@http-rpc(Todo)
-export interface ServiceDefinition {
+export interface ServiceDefinition extends RPCService<"Todo"> {
   createTodo: RequestResponse<createTodoRequest, Todo>;
   createTodoAsync: RequestResponse<createTodoRequest, Todo>;
 }

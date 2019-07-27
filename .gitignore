@@ -7,3 +7,4 @@ dist
 test/integration/generation/clients.ts
 .coverage
 package-lock.json
+yarn.lock

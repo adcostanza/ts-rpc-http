@@ -1,8 +1,10 @@
-import { RequestResponse } from 'ts-rpc-http/requestResponse';
+import {RequestResponse, RPCService} from "ts-rpc-http/requestResponse";
 
 export interface createTodoRequest {
   description: string;
 }
+
+export interface createTodoAsyncRequest extends createTodoRequest {}
 
 export interface Todo {
   id: string;
@@ -10,8 +12,7 @@ export interface Todo {
   dateCreated: Date;
 }
 
-//@http-rpc(Todo)
-export interface ServiceDefinition {
+export interface ServiceDefinition extends RPCService<"Todo"> {
   createTodo: RequestResponse<createTodoRequest, Todo>;
-  createTodoAsync: RequestResponse<createTodoRequest, Todo>;
+  createTodoAsync: RequestResponse<createTodoAsyncRequest, Todo>;
 }

@@ -11,7 +11,9 @@ describe("generator", () => {
     });
     const files = fs.readdirSync("test/integration/generation/schema");
     expect(files).toEqual([
+      "Potato.json",
       "ServiceDefinition.json",
+      "ServiceDefinition2.json",
       "Todo.json",
       "createTodoRequest.json"
     ]);

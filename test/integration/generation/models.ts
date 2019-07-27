@@ -1,16 +1,29 @@
-import {RequestResponse} from '../../../src/requestResponse';
+import {RequestResponse, RPCService} from "../../../src/requestResponse";
 
 export interface createTodoRequest {
-    description: string;
+  description: string;
 }
 
 export interface Todo {
-    id: string;
-    description: string;
-    dateCreated: Date;
+  id: string;
+  description: string;
+  dateCreated: Date;
 }
 
-//@http-rpc(Todo)
-export interface ServiceDefinition {
-    createTodo: RequestResponse<createTodoRequest, Todo>;
+export interface Potato {
+  id: string;
+  description: string;
+  dateCreated: Date;
+}
+
+export interface ServiceDefinition extends RPCService<"Todo"> {
+  //can resolve "Todo" with ts compiler
+  createTodo?: RequestResponse<createTodoRequest, Todo>;
+  createPotato?: RequestResponse<createTodoRequest, Potato>;
+}
+
+export interface ServiceDefinition2 extends RPCService<"Potato"> {
+  //can resolve "Potato" with ts compiler
+  createPotatoes?: RequestResponse<createTodoRequest, Todo>;
+  createTomatoes?: RequestResponse<createTodoRequest, Potato>;
 }

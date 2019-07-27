@@ -1,6 +1,7 @@
 import * as fs from "fs";
 import * as handlebars from "handlebars";
 import * as _ from "lodash";
+import { extract } from "./extractor";
 
 const util = require("util");
 const exec = util.promisify(require("child_process").exec);
@@ -11,6 +12,23 @@ export interface ProgramInterface {
   clients?: string;
   schemas?: boolean;
 }
+export interface Route {
+  routeName: string;
+  request: string;
+  response: string;
+}
+
+export interface Service {
+  serviceName?: string;
+  serviceDefinitionName?: string;
+  routes: Route[];
+}
+
+export interface HandlebarsTemplate {
+  services: Service[];
+  imports: string[];
+}
+export type TemplateMap = Record<string, Service>;
 
 const deleteFolderRecursive = function(_path) {
   if (fs.existsSync(_path)) {
@@ -76,130 +94,20 @@ export const generate = (program: ProgramInterface) => {
     const modelsLocation = program.model;
     const generatedName = program.clients;
 
-    /**
-     * returns the right side of the first occurence of the needle in the haystack
-     * @param needle the string to find
-     * @param haystack the string to find the needle in
-     */
-    const rightOf = (needle: string, haystack: string): string => {
-      return haystack
-        .trim()
-        .split(needle)[1]
-        .trim();
-    };
-
-    /**
-     * returns the left side of the first occurence of the needle in the haystack
-     * @param needle the string to find
-     * @param haystack the string to find the needle in
-     */
-    const leftOf = (needle: string, haystack: string): string => {
-      return haystack
-        .trim()
-        .split(needle)[0]
-        .trim();
-    };
-
     if ((program.clients != null && program.clients != "") || program.schemas) {
       const folder = path.resolve(modelsLocation, "..");
-      const data = fs.readFileSync(modelsLocation, "utf-8");
-      const lines = data.split("\n");
-      let onDefinition = false;
 
-      let accumulatedLines = ""; //can accumulate across newlines
-      interface Service {
-        serviceName: string;
-        serviceDefinitionName: string;
-        routes: { routeName: string; request: string; response: string }[];
-      }
-
-      type TemplateMap = Record<string, Service>;
-      const templateMap: TemplateMap = {};
-
-      let current = "";
-      for (let line of lines) {
-        //recognize special comment
-        if (line.trim().indexOf("//@http-rpc") > -1) {
-          onDefinition = true;
-          current = leftOf(")", rightOf("//@http-rpc(", line));
-          templateMap[current] = {
-            serviceName: current,
-            serviceDefinitionName: "",
-            routes: []
-          };
-          continue;
-        }
-
-        //skip lines with left side comments
-        if (leftOf("//", line) == "") {
-          continue;
-        } else {
-          //ignore right side comments
-          line = leftOf("//", line);
-        }
-
-        if (!onDefinition) {
-          continue;
-        }
-
-        if (line.trim() === "}") {
-          //end
-          onDefinition = false;
-          continue;
-        }
-
-        if (line.trim().indexOf("export") > -1) {
-          const serviceDefinitionName = leftOf(
-            "{",
-            rightOf("interface", line)
-          ).trim();
-
-          templateMap[current] = {
-            ...templateMap[current],
-            serviceDefinitionName
-          };
-          continue;
-        }
-
-        //req/res definition, will search for ; to find full line
-        accumulatedLines += line;
-        if (line.indexOf(";") >= 0) {
-          const routeName = leftOf(":", accumulatedLines);
-          const reqRes = rightOf(":", accumulatedLines);
-          const request = leftOf(",", rightOf("RequestResponse<", reqRes));
-
-          const response = leftOf(
-            ">",
-            rightOf(",", rightOf("RequestResponse<", reqRes))
-          );
-
-          //reset accumulatedLines
-          accumulatedLines = "";
-
-          templateMap[current].routes.push({ routeName, request, response });
-        }
-      }
-
-      const imports = _.uniq(
-        _.flattenDeep(
-          _.values(templateMap).map(service => {
-            return [
-              service.serviceDefinitionName,
-              ...service.routes.map(route => [route.request, route.response])
-            ];
-          })
-        )
+      const handlebarsData = extract(
+        path.resolve(process.cwd(), modelsLocation)
       );
 
       if (program.clients != null && program.clients != "") {
-        console.log(imports);
-
         const templateText = fs.readFileSync(
           path.resolve(__dirname, "template.handlebars"),
           "utf-8"
         );
         const template = handlebars.compile(templateText);
-        const generated = template({ services: templateMap, imports });
+        const generated = template(handlebarsData);
         const generatePath = path.resolve(folder, generatedName);
 
         fs.writeFile(generatePath, generated, err => {
@@ -212,7 +120,7 @@ export const generate = (program: ProgramInterface) => {
 
       if (program.schemas) {
         //now let's also generate json schemas
-        generateJSONSchemas(imports, modelsLocation, folder)
+        generateJSONSchemas(handlebarsData.imports, modelsLocation, folder)
           .then(r => resolve())
           .catch(reject);
       }

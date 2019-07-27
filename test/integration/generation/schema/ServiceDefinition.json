@@ -2,6 +2,42 @@
     "$ref": "#/definitions/ServiceDefinition",
     "$schema": "http://json-schema.org/draft-07/schema#",
     "definitions": {
+        "Potato": {
+            "properties": {
+                "dateCreated": {
+                    "description": "Enables basic storage and retrieval of dates and times.",
+                    "format": "date-time",
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "dateCreated",
+                "description",
+                "id"
+            ],
+            "type": "object"
+        },
+        "RequestResponse<createTodoRequest,Potato>": {
+            "properties": {
+                "request": {
+                    "$ref": "#/definitions/createTodoRequest"
+                },
+                "response": {
+                    "$ref": "#/definitions/Potato"
+                }
+            },
+            "required": [
+                "request",
+                "response"
+            ],
+            "type": "object"
+        },
         "RequestResponse<createTodoRequest,Todo>": {
             "properties": {
                 "request": {
@@ -19,13 +55,13 @@
         },
         "ServiceDefinition": {
             "properties": {
+                "createPotato": {
+                    "$ref": "#/definitions/RequestResponse<createTodoRequest,Potato>"
+                },
                 "createTodo": {
                     "$ref": "#/definitions/RequestResponse<createTodoRequest,Todo>"
                 }
             },
-            "required": [
-                "createTodo"
-            ],
             "type": "object"
         },
         "Todo": {
