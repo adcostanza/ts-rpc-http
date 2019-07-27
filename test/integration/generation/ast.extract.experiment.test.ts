@@ -1,5 +1,5 @@
 import * as ts from "typescript";
-import { HandlebarsTemplate, Service } from "../../../src/generator";
+import {HandlebarsTemplate, Service} from "../../../src/generator";
 
 test("extract via ast", async () => {
   // hardcode our input file
