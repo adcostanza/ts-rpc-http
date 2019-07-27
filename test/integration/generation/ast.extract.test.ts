@@ -1,5 +1,5 @@
 import * as ts from "typescript";
-import { Service } from "../../../src/generator";
+import { HandlebarsTemplate, Service } from "../../../src/generator";
 
 test("extract via ast", async () => {
   // hardcode our input file
@@ -72,6 +72,18 @@ test("extract via ast", async () => {
   };
 
   ts.forEachChild(source, visitInterfaceDeclaration);
+
+  const imports = services.reduce((importNames, service) => {
+    const { serviceDefinitionName } = service;
+    const routeNames = service.routes.map(route => route.routeName);
+    importNames.concat([...routeNames, serviceDefinitionName]);
+    return importNames;
+  }, []);
+
+  const handlebarsData: HandlebarsTemplate = {
+    services,
+    imports
+  };
 
   console.log(services);
 });
