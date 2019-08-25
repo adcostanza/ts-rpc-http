@@ -3,7 +3,7 @@ import {
     {{#each imports}}
   {{this}},
     {{/each}} 
-} from './models';
+} from './{{modelsLocation}}';
 
 {{#each services}}
 export class {{serviceName}}Client {

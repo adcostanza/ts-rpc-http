@@ -97,9 +97,13 @@ export const generate = (program: ProgramInterface) => {
     if ((program.clients != null && program.clients != "") || program.schemas) {
       const folder = path.resolve(modelsLocation, "..");
 
-      const handlebarsData = extract(
-        path.resolve(process.cwd(), modelsLocation)
-      );
+      //TODO this really sucks :(
+      const split = modelsLocation.split("/");
+      const importLocation = split[split.length - 1].split(".")[0];
+      const handlebarsData = {
+        ...extract(path.resolve(process.cwd(), modelsLocation)),
+        modelsLocation: importLocation
+      };
 
       if (program.clients != null && program.clients != "") {
         const templateText = fs.readFileSync(

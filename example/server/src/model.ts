@@ -4,8 +4,7 @@ export interface createTodoRequest {
   description: string;
 }
 
-export interface createTodoAsyncRequest extends createTodoRequest {
-}
+export interface createTodoAsyncRequest extends createTodoRequest {}
 
 export interface Todo {
   id: string;
@@ -13,7 +12,7 @@ export interface Todo {
   dateCreated: Date;
 }
 
-export interface ServiceDefinition extends RPCService<"Todo"> {
+export interface ServiceDefinition extends RPCService<'Todo'> {
   createTodo: RequestResponse<createTodoRequest, Todo>;
   createTodoAsync: RequestResponse<createTodoAsyncRequest, Todo>;
 }

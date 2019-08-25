@@ -4,7 +4,7 @@
   "description": "Example client",
   "main": "index.js",
   "scripts": {
-    "generate": "npx ts-generate --model src/models.ts --clients clients.ts"
+    "generate": "npx ts-generate --model src/model.ts --clients clients.ts"
   },
   "keywords": [],
   "author": "",
@@ -14,6 +14,6 @@
   },
   "dependencies": {
     "ts-node": "^8.0.2",
-    "ts-rpc-http": "0.0.42"
+    "ts-rpc-http": "0.0.49"
   }
 }
