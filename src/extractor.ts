@@ -1,4 +1,4 @@
-import {HandlebarsTemplate, Service} from "./generator";
+import { HandlebarsTemplate, Service } from "./generator";
 import * as ts from "typescript";
 
 export const extract = (filePath: string): HandlebarsTemplate => {
@@ -56,7 +56,8 @@ export const extract = (filePath: string): HandlebarsTemplate => {
       if (identifier === "RPCService") {
         const serviceName = node.typeArguments[0]
           .getText(source)
-          .replace(/"/g, "");
+          .replace(/"/g, "")
+          .replace(/'/g, "");
         currentService.serviceName = serviceName;
       }
     }
@@ -67,7 +68,7 @@ export const extract = (filePath: string): HandlebarsTemplate => {
   const servicesCleaned = services.filter(service => service.routes.length > 0);
 
   const imports = Array.from(
-      servicesCleaned.reduce((importNames, service) => {
+    servicesCleaned.reduce((importNames, service) => {
       const { serviceDefinitionName } = service;
       service.routes.forEach(route => {
         importNames.add(route.request);

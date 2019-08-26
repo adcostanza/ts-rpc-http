@@ -3709,10 +3709,10 @@ ts-node@^8.0.2:
     source-map-support "^0.5.6"
     yn "^3.0.0"
 
-ts-rpc-http@0.0.42:
-  version "0.0.42"
-  resolved "https://registry.yarnpkg.com/ts-rpc-http/-/ts-rpc-http-0.0.42.tgz#66239684fe4c75ae657675b08ea177eb2cea9df9"
-  integrity sha512-r4IRM+dSB2VoNtzDI08PRqWh8oedYrztvkdZFnMAoJYxGwNrCqHQ1CdF6b8KYJu29GgQBz9uZPnFlaIbE9x7kQ==
+ts-rpc-http@0.0.49:
+  version "0.0.49"
+  resolved "https://registry.yarnpkg.com/ts-rpc-http/-/ts-rpc-http-0.0.49.tgz#0a62f32fca4100daff7ae2e28d4f9dea7605a495"
+  integrity sha512-j4Wa99bTNBUG31clcu7M0/IRcQ/hy0VY0DhqHCL+jcrFk0Vlk+xh1VfRtclDEBiUX21zER7UiEZy47zwz2b5mA==
   dependencies:
     "@types/axios" "^0.14.0"
     "@types/jest" "^24.0.5"

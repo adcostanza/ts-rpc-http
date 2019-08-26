@@ -2,21 +2,21 @@
     "$ref": "#/definitions/ServiceDefinition",
     "$schema": "http://json-schema.org/draft-07/schema#",
     "definitions": {
-      "RequestResponse<createTodoAsyncRequest,Todo>": {
-        "properties": {
-          "request": {
-            "$ref": "#/definitions/createTodoAsyncRequest"
-          },
-          "response": {
-            "$ref": "#/definitions/Todo"
-          }
+        "RequestResponse<createTodoAsyncRequest,Todo>": {
+            "properties": {
+                "request": {
+                    "$ref": "#/definitions/createTodoAsyncRequest"
+                },
+                "response": {
+                    "$ref": "#/definitions/Todo"
+                }
+            },
+            "required": [
+                "request",
+                "response"
+            ],
+            "type": "object"
         },
-        "required": [
-          "request",
-          "response"
-        ],
-        "type": "object"
-      },
         "RequestResponse<createTodoRequest,Todo>": {
             "properties": {
                 "request": {
@@ -38,7 +38,7 @@
                     "$ref": "#/definitions/RequestResponse<createTodoRequest,Todo>"
                 },
                 "createTodoAsync": {
-                  "$ref": "#/definitions/RequestResponse<createTodoAsyncRequest,Todo>"
+                    "$ref": "#/definitions/RequestResponse<createTodoAsyncRequest,Todo>"
                 }
             },
             "required": [
@@ -66,17 +66,17 @@
                 "description",
                 "id"
             ],
-          "type": "object"
+            "type": "object"
         },
-      "createTodoAsyncRequest": {
-        "properties": {
-          "description": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "description"
-        ],
+        "createTodoAsyncRequest": {
+            "properties": {
+                "description": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "description"
+            ],
             "type": "object"
         },
         "createTodoRequest": {
